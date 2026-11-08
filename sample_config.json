@@ -1,0 +1,14 @@
+
+{
+  "hostname": "DEV-SERVER-01",
+  "operating_system": "Windows Server 2022",
+  "firewall_enabled": false,
+  "antivirus_enabled": true,
+  "automatic_updates": false,
+  "guest_account_enabled": true,
+  "minimum_password_length": 6,
+  "unnecessary_services": [
+    "Telnet",
+    "FTP"
+  ]
+}
