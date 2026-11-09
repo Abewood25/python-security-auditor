@@ -1,5 +1,4 @@
 
-
 import json
 
 from auditor import audit_configuration
@@ -14,7 +13,10 @@ def main():
     with open("sample_config.json", "r", encoding="utf-8") as file:
         config = json.load(file)
 
-    findings = audit_configuration(config)
+    with open("security_policy.json", "r", encoding="utf-8") as file:
+        policy = json.load(file)
+
+    findings = audit_configuration(config, policy)
 
     score = calculate_risk_score(findings)
     summary = summarize_findings(findings)
@@ -51,4 +53,3 @@ def main():
 
 if __name__ == "__main__":
     main()
-

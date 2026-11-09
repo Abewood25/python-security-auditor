@@ -1,0 +1,11 @@
+
+{
+  "minimum_password_length": 12,
+  "require_firewall": true,
+  "require_antivirus": true,
+  "require_automatic_updates": true,
+  "require_mfa": true,
+  "require_disk_encryption": true,
+  "allow_remote_desktop": false,
+  "allow_guest_account": false
+}

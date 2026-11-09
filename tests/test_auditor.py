@@ -74,3 +74,73 @@ def test_findings_summary():
     assert summary["HIGH"] == 1
     assert summary["MEDIUM"] == 1
     assert summary["LOW"] == 1
+
+
+def test_mfa_disabled():
+    config = secure_config()
+    config["mfa_enabled"] = False
+
+    policy = {
+        "minimum_password_length": 12,
+        "require_firewall": True,
+        "require_antivirus": True,
+        "require_automatic_updates": True,
+        "require_mfa": True,
+        "require_disk_encryption": False,
+        "allow_remote_desktop": True,
+        "allow_guest_account": False
+    }
+
+    findings = audit_configuration(config, policy)
+
+    assert any(
+        finding["issue"] == "Multi-factor authentication is disabled"
+        for finding in findings
+    )
+
+
+def test_disk_encryption_disabled():
+    config = secure_config()
+    config["disk_encryption_enabled"] = False
+
+    policy = {
+        "minimum_password_length": 12,
+        "require_firewall": True,
+        "require_antivirus": True,
+        "require_automatic_updates": True,
+        "require_mfa": False,
+        "require_disk_encryption": True,
+        "allow_remote_desktop": True,
+        "allow_guest_account": False
+    }
+
+    findings = audit_configuration(config, policy)
+
+    assert any(
+        finding["issue"] == "Disk encryption is disabled"
+        for finding in findings
+    )
+
+
+def test_remote_desktop_enabled():
+    config = secure_config()
+    config["remote_desktop_enabled"] = True
+
+    policy = {
+        "minimum_password_length": 12,
+        "require_firewall": True,
+        "require_antivirus": True,
+        "require_automatic_updates": True,
+        "require_mfa": False,
+        "require_disk_encryption": False,
+        "allow_remote_desktop": False,
+        "allow_guest_account": False
+    }
+
+    findings = audit_configuration(config, policy)
+
+    assert any(
+        finding["issue"] == "Remote Desktop is enabled"
+        for finding in findings
+    )
+

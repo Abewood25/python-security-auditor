@@ -1,4 +1,5 @@
 
+
 {
   "hostname": "DEV-SERVER-01",
   "operating_system": "Windows Server 2022",
@@ -7,8 +8,12 @@
   "automatic_updates": false,
   "guest_account_enabled": true,
   "minimum_password_length": 6,
+  "mfa_enabled": false,
+  "disk_encryption_enabled": false,
+  "remote_desktop_enabled": true,
   "unnecessary_services": [
     "Telnet",
     "FTP"
   ]
 }
+
