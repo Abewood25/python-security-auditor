@@ -3,3 +3,4 @@ __pycache__/
 .pytest_cache/
 security_report.json
 windows_security_report.json
+defender_security_report.json
