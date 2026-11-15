@@ -5,3 +5,4 @@ security_report.json
 windows_security_report.json
 defender_security_report.json
 full_security_report.json
+windows_update_report.json

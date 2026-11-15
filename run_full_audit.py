@@ -13,12 +13,17 @@ def main():
     print("\n=== WINDOWS SECURITY POSTURE ASSESSMENT ===")
 
     try:
-        firewall_profiles, defender_status = collect_security_data()
+        (
+            firewall_profiles,
+            defender_status,
+            windows_updates
+        ) = collect_security_data()
 
         report = build_security_report(
             firewall_profiles,
             defender_status,
-            scan_time=datetime.now(timezone.utc)
+            scan_time=datetime.now(timezone.utc),
+            windows_updates=windows_updates
         )
 
     except (
@@ -30,7 +35,7 @@ def main():
         KeyError,
         TypeError
     ) as error:
-        print(f"Security audit failed: {error}")
+        print(f"\nSecurity audit failed: {error}")
         return
 
     print("\n=== SECURITY SUMMARY ===")
@@ -40,6 +45,14 @@ def main():
     print(f"Low severity: {report['summary']['LOW']}")
     print(f"Risk score: {report['risk_score']}")
     print(f"Risk level: {report['risk_level']}")
+
+    print("\n=== SECURITY MODULES ===")
+    print("Windows Firewall: Assessed")
+    print("Microsoft Defender: Assessed")
+    print(
+        "Windows Update: "
+        f"{report['windows_update_status']}"
+    )
 
     print("\n=== SECURITY FINDINGS ===")
 

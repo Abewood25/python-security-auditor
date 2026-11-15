@@ -83,3 +83,69 @@ def test_report_contains_security_evidence():
     assert "defender_status" in report
     assert "findings" in report
     assert "timestamp" in report
+
+def test_recent_windows_updates():
+    updates = [
+        {
+            "HotFixID": "KB1234567",
+            "InstalledOn": "2026-11-10"
+        }
+    ]
+
+    report = build_security_report(
+        healthy_firewall(),
+        healthy_defender(),
+        scan_time=TEST_TIME,
+        windows_updates=updates
+    )
+
+    assert report["windows_update_status"] == "ASSESSED"
+    assert report["total_findings"] == 0
+
+
+def test_outdated_windows_update_history():
+    updates = [
+        {
+            "HotFixID": "KB1234567",
+            "InstalledOn": "2026-08-01"
+        }
+    ]
+
+    report = build_security_report(
+        healthy_firewall(),
+        healthy_defender(),
+        scan_time=TEST_TIME,
+        windows_updates=updates
+    )
+
+    assert report["total_findings"] == 1
+    assert report["summary"]["MEDIUM"] == 1
+    assert report["risk_score"] == 5
+
+
+def test_combined_security_weaknesses():
+    firewall = healthy_firewall()
+    firewall[2]["Enabled"] = False
+
+    defender = healthy_defender()
+    defender["RealTimeProtectionEnabled"] = False
+
+    updates = [
+        {
+            "HotFixID": "KB1234567",
+            "InstalledOn": "2026-08-01"
+        }
+    ]
+
+    report = build_security_report(
+        firewall,
+        defender,
+        scan_time=TEST_TIME,
+        windows_updates=updates
+    )
+
+    assert report["total_findings"] == 3
+    assert report["summary"]["HIGH"] == 2
+    assert report["summary"]["MEDIUM"] == 1
+    assert report["risk_score"] == 25
+    assert report["risk_level"] == "HIGH"
