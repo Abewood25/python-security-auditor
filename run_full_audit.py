@@ -1,4 +1,4 @@
-
+from report_generator import save_markdown_report
 import json
 import subprocess
 from datetime import datetime, timezone
@@ -70,7 +70,15 @@ def main():
     ) as file:
         json.dump(report, file, indent=4)
 
+    
     print("\nReport saved to full_security_report.json")
+
+    save_markdown_report(
+        report,
+        "full_security_report.md"
+    )
+
+    print("Markdown report saved to full_security_report.md")
 
 
 if __name__ == "__main__":
